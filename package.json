@@ -5,6 +5,11 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "build": "tsc --jsx react-jsx",
+    "lint": "eslint \"{src/**,packages/**/src/**}\"",
+    "test": "jest"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
@@ -13,6 +18,7 @@
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jest": "^24.4.0",
     "jest": "^27.0.6",
+    "ts-jest": "^27.0.4",
     "typescript": "^4.3.5"
   }
 }
