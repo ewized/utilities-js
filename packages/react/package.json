@@ -2,7 +2,7 @@
   "name": "@ewized/utilities-react",
   "main": "./src/index.js",
   "dependencies": {
-    "@ewized/utilities-core": "workspace:packages/core",
+    "@ewized/utilities-core": "workspace:*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
