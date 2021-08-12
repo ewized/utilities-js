@@ -1,4 +1,5 @@
 module.exports = {
+  'root': true,
   'parser': '@typescript-eslint/parser',
   'plugins': ['@typescript-eslint', 'eslint-plugin-import', 'jest'],
   'parserOptions': {
@@ -32,6 +33,5 @@ module.exports = {
   'globals': {
     chrome: 'readonly',
     globalThis: 'readonly',
-    __dev: 'readonly',
   },
 };
