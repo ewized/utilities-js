@@ -4,6 +4,8 @@
     "target": "es2020",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": false,
+    "declaration": true,
+    "emitDeclarationOnly": false,
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
