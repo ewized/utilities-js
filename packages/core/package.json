@@ -1,0 +1,4 @@
+{
+  "name": "@ewized/utilities-core",
+  "module": "./src/index.js"
+}
