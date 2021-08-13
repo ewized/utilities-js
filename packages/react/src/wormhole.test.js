@@ -51,8 +51,8 @@ it('builds actions', () => {
   expect(actions.delta('foo', 'bar')).toStrictEqual(action('delta', 'foo', 'bar'));
   expect(actions.onEcho('foo', 'bar')).toBeInstanceOf(Function);
   expect(actions.onEcho('foo', 'bar')()).toBeInstanceOf(Array);
-  expect(actions.onEcho('foo', 'bar')()).toStrictEqual(action('onEcho', 'foo', 'bar', undefined));
-  expect(actions.onEcho('foo', 'bar')('foobar')).toStrictEqual(action('onEcho', 'foo', 'bar', 'foobar'));
+  expect(actions.onEcho('foo', 'bar')()).toStrictEqual(action('onEcho', undefined, 'foo', 'bar'));
+  expect(actions.onEcho('foo', 'bar')('foobar')).toStrictEqual(action('onEcho', 'foobar', 'foo', 'bar'));
 });
 
 it('spreads actions', () => {
@@ -87,7 +87,7 @@ it('splices', () => {
         return { ...state, counter: state.counter - amount };
       },
 
-      onMultiplier(state, [amount = 1, modifier = 1]) {
+      onMultiplier(state, [, amount = 1, modifier = 1]) {
         return { ...state, counter: state.counter * amount * modifier };
       },
     },

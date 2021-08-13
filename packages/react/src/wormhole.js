@@ -42,7 +42,7 @@ const makeAction = (name, namespace) => {
   const type = getType(namespace, name);
   // check if its an event handle action, append the event to the arg
   if (name.match(/^on[A-Z][a-z]?/)) {
-    return (...args) => (event) => Object.assign([...args, event], { type });
+    return (...args) => (event) => Object.assign([event, ...args], { type });
   }
   // normal action dispatch copied args
   return (...args) => Object.assign([], args, { type });
