@@ -19,7 +19,7 @@ export const reducerBuilder = (namespace, initialState) => ({
   add(type, reducer) {
     notNullish(type, 'type is required');
     notNullish(reducer, 'reducer is required');
-    this.reducers.set(type, reducer);
+    this.reducers.set(getType(namespace, type), reducer);
     return this;
   },
 
@@ -28,7 +28,7 @@ export const reducerBuilder = (namespace, initialState) => ({
     return (state = initialState, action) => {
       // get the value once and check its truthy value
       // its faster than using has/get combo
-      const reducer = this.reducers.get(getType(namespace, action?.type));
+      const reducer = this.reducers.get(action.type);
       if (reducer) {
         return reducer(state, action);
       }

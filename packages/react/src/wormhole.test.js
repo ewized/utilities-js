@@ -32,6 +32,24 @@ it('builds reducer', () => {
   expect(state.counter).toBe(0);
 });
 
+it('builds namedspaced reducer', () => {
+  let state = { counter: 0 };
+  const reducer = reducerBuilder('counter')
+    .add('increment', (state) => ({ ...state, counter: state.counter + 1 }))
+    .add('decrement', (state) => ({ ...state, counter: state.counter - 1 }))
+    .build();
+
+  // initial state checking
+  expect(state.counter).toBe(0);
+
+  // increment
+  state = reducer(state, { type: 'counter/increment' });
+  expect(state.counter).toBe(1);
+  // decrement
+  state = reducer(state, { type: 'counter/decrement' });
+  expect(state.counter).toBe(0);
+});
+
 it('builds actions', () => {
   const actions = actionBuilder()
     .add('echo')
