@@ -40,12 +40,12 @@ export const reducerBuilder = (namespace, initialState) => ({
 /* Create the action depending on if its an event handler */
 const makeAction = (name, namespace) => {
   const type = getType(namespace, name);
-  // check if its an event handle action, append the event to the arg
+  // check if its an event handle action, append the event to the payload(args)
   if (name.match(/^on[A-Z][a-z]?/)) {
-    return (...args) => (event) => Object.assign([event, ...args], { type });
+    return (...payload) => (event) => Object.assign([event, ...payload], { type, payload });
   }
-  // normal action dispatch copied args
-  return (...args) => Object.assign([], args, { type });
+  // normal action dispatch copied payload(args)
+  return (...payload) => Object.assign([], payload, { type, payload });
 };
 
 /* Creates a builder that builds the actions from the types */
