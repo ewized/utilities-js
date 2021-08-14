@@ -91,7 +91,7 @@ export const createSplice = ({ initialState, name, reducers }) => {
  * Create a wormhole state mangment pattern using React Context and Reducer.
  * The interface mimics Redux Slice to allow Wormholes to be created with slices.
  */
-export const createWormhole = ({ displayName, initialState, actions, reducer }) => {
+export const createWormhole = ({ displayName, name, initialState, actions, reducer }) => {
   notNullish(actions, 'actions is required');
   notNullish(reducer, 'reducer is required');
   // spread the state over to make sure the context is created with an object
@@ -108,7 +108,7 @@ export const createWormhole = ({ displayName, initialState, actions, reducer }) 
     useImperativeHandle(ref, () => controller, [controller]);
     return <Context.Provider value={controller} children={children} />;
   });
-  Context.displayName = displayName;
+  Context.displayName = name ?? displayName;
   const hook = () => useContext(Context);
   const hoc = (Component) => forwardRef((props, ref) => (
     <Provider ref={ref}><Component {...props} /></Provider>
