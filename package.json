@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "tsc --jsx react-jsx",
-    "lint": "eslint \"{src/**,packages/**/src/**}\"",
+    "lint": "eslint \"{src/**,packages/**/**}\"",
     "test": "jest"
   },
   "devDependencies": {

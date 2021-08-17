@@ -11,13 +11,13 @@
     "esModuleInterop": true,
     "allowJs": true,
     "outDir": "dist",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx" 
   },
   "include": [
-    "packages/*/src/**/*"
+    "packages/*/**/*"
   ],
   "exclude": [
-    "packages/*/src/**/*.stories.js",
-    "packages/*/src/**/*.test.js",
+    "packages/*/**/*.stories.js",
+    "packages/*/**/*.test.js",
   ]
 }

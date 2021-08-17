@@ -1,6 +1,6 @@
 {
   "name": "@ewized/utilities-react",
-  "main": "./src/index.js",
+  "main": "./index.js",
   "dependencies": {
     "@ewized/utilities-core": "workspace:*"
   },
