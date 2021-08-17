@@ -9,6 +9,8 @@ import {
 import { notNullish, wrapLastProxy } from '@ewized/utilities-core';
 
 
+const IS_DEV = process.env.NODE_ENV !== 'production';
+
 // Prepend the namespace if it exists
 const getType = (namespace, type) => namespace ? `${namespace}/${type.toString()}` : type;
 
@@ -117,6 +119,7 @@ export const createWormhole = ({ displayName, name, initialState, actions, reduc
   notNullish(reducer, 'reducer is required');
   // spread the state over to make sure the context is created with an object
   const Context = createContext({ ...initialState });
+  IS_DEV && (Context.displayName = name ?? displayName);
   // pass an init action in cases where type is expected on the action
   const initializer = initialState ? undefined : (state) => reducer(state, INIT_ACTION);
   const Provider = forwardRef(({ children }, ref) => {
@@ -130,11 +133,13 @@ export const createWormhole = ({ displayName, name, initialState, actions, reduc
     useImperativeHandle(ref, () => controller, [controller]);
     return <Context.Provider value={controller} children={children} />;
   });
-  Context.displayName = name ?? displayName;
+  IS_DEV && (Provider.displayName = name ?? displayName);
   const hook = () => useContext(Context);
-  const hoc = (Component) => forwardRef((props, ref) => (
-    <Provider ref={ref}><Component {...props} /></Provider>
-  ));
+  const hoc = (Component) => {
+    const Child = (props) => <Provider><Component {...props} /></Provider>;
+    IS_DEV && (Child.displayName = `with${name ?? displayName}`);
+    return Child;
+  };
   // return an array of the hook, provider
   // but also assign the context and hoc if we would need it later
   return Object.assign([hook, Provider, hoc], { hook, hoc, Provider, Context });
