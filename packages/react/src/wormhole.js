@@ -12,6 +12,8 @@ import { notNullish, wrapLastProxy } from '@ewized/utilities-core';
 // Prepend the namespace if it exists
 const getType = (namespace, type) => namespace ? `${namespace}/${type.toString()}` : type;
 
+export const INIT_ACTION = { type: '@@INIT' };
+
 /* Creates a builder that builds a case like reducer */
 export const reducerBuilder = (namespace, initialState) => ({
   reducers: new Map(),
@@ -23,22 +25,29 @@ export const reducerBuilder = (namespace, initialState) => ({
     return this;
   },
 
+  addDefault(reducer) {
+    if (reducer) {
+      this.reducers.set('default', reducer);
+    } else {
+      this.reducers.delete('default');
+    }
+    return this;
+  },
+
   /* Builds the reducer with an optional initialState */
   build() {
-    return (state = initialState, action) => {
+    return (state = initialState, action = INIT_ACTION) => {
       // get the value once and check its truthy value
       // its faster than using has/get combo
-      const reducer = this.reducers.get(action.type);
-      if (reducer) {
-        return reducer(state, action);
-      }
-      return state;
+      const reducer = this.reducers.get(action?.type) ?? this.reducers.get('default');
+      // pass the state to the default reducer or just return the state
+      return reducer?.(state, action) ?? state;
     };
   },
 });
 
 /* Create the action depending on if its an event handler */
-const makeAction = (name, namespace) => {
+export const makeAction = (name, namespace) => {
   const type = getType(namespace, name);
   // check if its an event handle action, append the event to the payload(args)
   if (name.match(/^on[A-Z][a-z]?/)) {
@@ -66,6 +75,18 @@ export const actionBuilder = (namespace) => ({
 /*
  * Creates a Splice which is our version of a Slice
  * It constructs the actions object that uses the actionsBuilder()
+ * When the reducers map contains a `default` key that would be used as
+ * the catch all reducer.
+ * All reducers are able to be nested with additional reducerBuilders.
+ * Note: They use the builder that returns the function not the object format.
+ * If you perfer to use the builder pattern have an object with a default key.
+ *
+ * reducers: {
+ *   default: reducerBuilder()
+ *    .add('nested action', () => { ... })
+ *    .add('another action', () => { ... })
+ *    .build(),
+ * }
  */
 export const createSplice = ({ initialState, name, reducers }) => {
   notNullish(reducers, 'reducers is required');
@@ -89,14 +110,15 @@ export const createSplice = ({ initialState, name, reducers }) => {
 
 /*
  * Create a wormhole state mangment pattern using React Context and Reducer.
- * The interface mimics Redux Slice to allow Wormholes to be created with slices.
+ * The interface mimics the return of Slice to allow Wormholes to be created with slices.
  */
 export const createWormhole = ({ displayName, name, initialState, actions, reducer }) => {
   notNullish(actions, 'actions is required');
   notNullish(reducer, 'reducer is required');
   // spread the state over to make sure the context is created with an object
   const Context = createContext({ ...initialState });
-  const initializer = initialState ? undefined : reducer;
+  // pass an init action in cases where type is expected on the action
+  const initializer = initialState ? undefined : (state) => reducer(state, INIT_ACTION);
   const Provider = forwardRef(({ children }, ref) => {
     // the reducer and state for the react component
     // if initialState is defined respect react conventions, the initializer will be undefined

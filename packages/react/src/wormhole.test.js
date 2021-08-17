@@ -1,8 +1,14 @@
 import { createRef, useEffect } from 'react';
-import { wrapLastProxy } from '@ewized/utilities-core';
 import { create } from 'react-test-renderer';
+import { wrapLastProxy } from '@ewized/utilities-core';
 
-import { actionBuilder, createSplice, createWormhole, reducerBuilder } from './wormhole.js';
+import {
+  actionBuilder,
+  createSplice,
+  createWormhole,
+  makeAction,
+  reducerBuilder,
+} from './wormhole.js';
 
 
 it('builds reducer', () => {
@@ -57,10 +63,8 @@ it('builds actions', () => {
     .add('delta')
     .build();
 
-  const action = (type, ...args) => {
-    args.type = type;
-    return args;
-  };
+  const action = (type, ...args) => makeAction(type)(...args);
+  const onAction = (type, event, ...args) => makeAction(type)(...args)(event);
 
   expect(actions.bob).toBeUndefined();
   expect(actions.echo).toBeDefined();
@@ -69,8 +73,8 @@ it('builds actions', () => {
   expect(actions.delta('foo', 'bar')).toStrictEqual(action('delta', 'foo', 'bar'));
   expect(actions.onEcho('foo', 'bar')).toBeInstanceOf(Function);
   expect(actions.onEcho('foo', 'bar')()).toBeInstanceOf(Array);
-  expect(actions.onEcho('foo', 'bar')()).toStrictEqual(action('onEcho', undefined, 'foo', 'bar'));
-  expect(actions.onEcho('foo', 'bar')('foobar')).toStrictEqual(action('onEcho', 'foobar', 'foo', 'bar'));
+  expect(actions.onEcho('foo', 'bar')()).toStrictEqual(onAction('onEcho', undefined, 'foo', 'bar'));
+  expect(actions.onEcho('foo', 'bar')('foobar')).toStrictEqual(onAction('onEcho', 'foobar', 'foo', 'bar'));
 });
 
 it('spreads actions', () => {
@@ -167,7 +171,7 @@ it('wormholes', () => {
       elapse(20, 's');
       return () => destory();
     }, []);
-    return <button data-testid="vortext" onClick={onGenerate()}>{vortex}</button>;
+    return <button data-testid="vortex" onClick={onGenerate()}>{vortex}</button>;
   };
 
   const ref = createRef();
