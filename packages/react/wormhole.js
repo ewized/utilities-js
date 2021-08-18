@@ -111,7 +111,8 @@ export const createSplice = ({ initialState, name, reducers }) => {
   };
 };
 
-const defaultEnhancer = {
+
+const defaultEnhancers = {
   unsafe_useReducer: useReducer,
   composeReducer: identity,
   composeDispatch: (store) => (next) => (action) => next(action),
@@ -119,7 +120,7 @@ const defaultEnhancer = {
 };
 
 /** Create the default context that will be used when no enhancers are present */
-const EnhancerContext = createContext(defaultEnhancer);
+const EnhancerContext = createContext(defaultEnhancers);
 IS_DEV && (EnhancerContext.displayName = 'EnhancerContext');
 
 /**
@@ -147,10 +148,10 @@ export const createWormhole = ({ displayName, name, initialState, actions, reduc
   const initializer = initialState ? undefined : (state) => reducer(state, INIT_ACTION);
   const Provider = forwardRef(({ children }, ref) => {
     const {
-      unsafe_useReducer: useReducer = defaultEnhancer.unsafe_useReducer, // this is more of an experiment
-      composeReducer = defaultEnhancer.composeReducer, // compose reducers
-      composeDispatch = defaultEnhancer.composeDispatch, // middleware
-      composeController = defaultEnhancer.composeController, // compose the store?
+      unsafe_useReducer: useReducer = defaultEnhancers.unsafe_useReducer, // this is more of an experiment
+      composeReducer = defaultEnhancers.composeReducer, // compose reducers
+      composeDispatch = defaultEnhancers.composeDispatch, // middleware
+      composeController = defaultEnhancers.composeController, // compose the store?
     } = useContext(EnhancerContext);
     // the reducer and state for the react component
     // if initialState is defined respect react conventions, the initializer will be undefined
