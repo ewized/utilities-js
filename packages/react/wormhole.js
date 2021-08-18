@@ -7,6 +7,7 @@ import {
   useReducer,
 } from 'react';
 import { notNullish, wrapLastProxy } from '@ewized/utilities-core';
+import { default as identity } from 'lodash/identity.js';
 
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
@@ -110,6 +111,28 @@ export const createSplice = ({ initialState, name, reducers }) => {
   };
 };
 
+const defaultEnhancer = {
+  unsafe_useReducer: useReducer,
+  composeReducer: identity,
+  composeDispatch: (store) => (next) => (action) => next(action),
+  composeController: identity,
+};
+
+/** Create the default context that will be used when no enhancers are present */
+const EnhancerContext = createContext(defaultEnhancer);
+IS_DEV && (EnhancerContext.displayName = 'EnhancerContext');
+
+/**
+ * Create the enchancer provider with the props. All props must be stable and not
+ * change durring rerenders or funny things will start to happen.
+ */
+export const WormholeEnhancer = ({ children, compose, ...props }) => {
+  const parentEnhancer = useContext(EnhancerContext);
+  // If compose is a present function compose the parent enhancer
+  const value = compose?.(parentEnhancer) ?? props;
+  return <EnhancerContext.Provider value={value} children={children} />;
+};
+
 /*
  * Create a wormhole state mangment pattern using React Context and Reducer.
  * The interface mimics the return of Slice to allow Wormholes to be created with slices.
@@ -118,17 +141,31 @@ export const createWormhole = ({ displayName, name, initialState, actions, reduc
   notNullish(actions, 'actions is required');
   notNullish(reducer, 'reducer is required');
   // spread the state over to make sure the context is created with an object
-  const Context = createContext({ ...initialState });
+  const Context = createContext({ ...initialState, getState: () => initialState });
   IS_DEV && (Context.displayName = name ?? displayName);
   // pass an init action in cases where type is expected on the action
   const initializer = initialState ? undefined : (state) => reducer(state, INIT_ACTION);
   const Provider = forwardRef(({ children }, ref) => {
+    const {
+      unsafe_useReducer: useReducer = defaultEnhancer.unsafe_useReducer, // this is more of an experiment
+      composeReducer = defaultEnhancer.composeReducer, // compose reducers
+      composeDispatch = defaultEnhancer.composeDispatch, // middleware
+      composeController = defaultEnhancer.composeController, // compose the store?
+    } = useContext(EnhancerContext);
     // the reducer and state for the react component
     // if initialState is defined respect react conventions, the initializer will be undefined
     // if initialState is undefined use the reducer to init the state
-    const [state, dispatch] = useReducer(reducer, initialState, initializer);
-    // create the controller of this wormhole
-    const controller = useMemo(() => ({ ...state, ...wrapLastProxy(actions, dispatch) }), [state, actions]);
+    const [state, dispatch] = useReducer(composeReducer(reducer), initialState, composeReducer(initializer));
+    // create the controller of this wormhole its like a store in the sence of redux
+    const controller = useMemo((composedDispatch = composeDispatch({
+      getState: () => state,
+      dispatch,
+    })(dispatch)) => composeController({
+      ...state,
+      ...wrapLastProxy(actions, composedDispatch),
+      getState: () => state,
+      dispatch: composedDispatch,
+    }), [state, actions]);
     // expose the controller to the ref
     useImperativeHandle(ref, () => controller, [controller]);
     return <Context.Provider value={controller} children={children} />;
