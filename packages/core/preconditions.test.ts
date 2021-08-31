@@ -1,4 +1,4 @@
-import { notNullish, ConditionsError } from './preconditions.js';
+import { notNullish, ConditionsError } from './preconditions';
 
 
 describe('notNullish', () => {
