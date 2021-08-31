@@ -17,8 +17,9 @@ module.exports = {
     'max-len': ['warn', 120],
     'object-curly-spacing': ['error', 'always'],
     'indent': ['error', 2, { 'SwitchCase': 1 }],
+    'spaced-comment': ['error', 'always', { 'markers': ['?', '?.'] }],
     'import/no-nodejs-modules': 'warn',
-    'import/extensions': ['error', 'always'],
+    'import/extensions': ['error', 'never'],
     'import/newline-after-import': ['error', { 'count': 2 }],
     'import/order': ['error', {
       'groups': ['builtin', 'internal', 'external', ['sibling', 'parent']],

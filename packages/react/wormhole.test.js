@@ -8,7 +8,7 @@ import {
   createWormhole,
   makeAction,
   reducerBuilder,
-} from './wormhole.js';
+} from './wormhole';
 
 
 it('builds reducer', () => {
@@ -85,12 +85,12 @@ it('spreads actions', () => {
     .build();
 
   // destructure the object by hand
-  const { bob, echo } = actions; // ?
+  const { bob, echo } = actions; //?
   expect(bob).toBeUndefined();
   expect(echo).toBeDefined();
 
   // esctructure the object with the spread opperator
-  const spreadCopy = { ...actions }; // ?
+  const spreadCopy = { ...actions }; //?
   expect(spreadCopy.bob).toBeUndefined();
   expect(spreadCopy.echo).toBeDefined();
 });
@@ -176,18 +176,18 @@ it('wormholes', () => {
 
   const ref = createRef();
   expect(() => create(<Wormhole ref={ref}><Vortex /></Wormhole>)).not.toThrow();
-  ref.current; // ?
+  ref.current; //?
 });
 
 it('spreads', () => {
   const args = ['x', 'y', 'z'];
   const type = 'tester';
 
-  const action = Object.assign([], args, { type }); // ?
+  const action = Object.assign([], args, { type }); //?
 
   const { 0: x, 1: y, 2: z, type: destructType } = action;
   const { ...rest } = action;
-  rest; // ?
+  rest; //?
   expect(destructType).toEqual(type);
   expect([x, y, z]).toEqual(args);
   expect(rest).toEqual({ 0: x, 1: y, 2: z, type });

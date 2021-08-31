@@ -462,6 +462,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ewized/utilities@workspace:."
   dependencies:
+    "@types/jest": ^27.0.1
     "@typescript-eslint/eslint-plugin": ^4.28.4
     "@typescript-eslint/parser": ^4.28.4
     eslint: ^7.32.0
@@ -716,6 +717,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jest/types@npm:^27.1.0":
+  version: 27.1.0
+  resolution: "@jest/types@npm:27.1.0"
+  dependencies:
+    "@types/istanbul-lib-coverage": ^2.0.0
+    "@types/istanbul-reports": ^3.0.0
+    "@types/node": "*"
+    "@types/yargs": ^16.0.0
+    chalk: ^4.0.0
+  checksum: 11899aba8103e00332baab35eb7ed435e4e06b270d02ca75fc6ccf08e41f36abae7b25d623377da47596c3e817c102e79e99caf717e6ec8eb78a85fdaa439ee8
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -850,6 +864,16 @@ __metadata:
   dependencies:
     "@types/istanbul-lib-report": "*"
   checksum: f1ad54bc68f37f60b30c7915886b92f86b847033e597f9b34f2415acdbe5ed742fa559a0a40050d74cdba3b6a63c342cac1f3a64dba5b68b66a6941f4abd7903
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:^27.0.1":
+  version: 27.0.1
+  resolution: "@types/jest@npm:27.0.1"
+  dependencies:
+    jest-diff: ^27.0.0
+    pretty-format: ^27.0.0
+  checksum: 972aaae341b83eb608970c93295282f1f9edc056dc8123635456cbaced822702673118d60279c7b889300e7c9a0726c3674d701115915e2e1967db09542389c2
   languageName: node
   linkType: hard
 
@@ -3121,6 +3145,18 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
+"jest-diff@npm:^27.0.0":
+  version: 27.1.0
+  resolution: "jest-diff@npm:27.1.0"
+  dependencies:
+    chalk: ^4.0.0
+    diff-sequences: ^27.0.6
+    jest-get-type: ^27.0.6
+    pretty-format: ^27.1.0
+  checksum: 8475d6daf0e0ab166a647debd9c6c622e2a79fb0c4c98b1158b87bedf3b118ffbf56004020335dad4f45686667f621f6c102f79d1a3b6a20379c01699b8b3adc
+  languageName: node
+  linkType: hard
+
 "jest-diff@npm:^27.0.6":
   version: 27.0.6
   resolution: "jest-diff@npm:27.0.6"
@@ -4353,6 +4389,18 @@ fsevents@^2.3.2:
   version: 1.1.2
   resolution: "prelude-ls@npm:1.1.2"
   checksum: c4867c87488e4a0c233e158e4d0d5565b609b105d75e4c05dc760840475f06b731332eb93cc8c9cecb840aa8ec323ca3c9a56ad7820ad2e63f0261dadcb154e4
+  languageName: node
+  linkType: hard
+
+"pretty-format@npm:^27.0.0, pretty-format@npm:^27.1.0":
+  version: 27.1.0
+  resolution: "pretty-format@npm:27.1.0"
+  dependencies:
+    "@jest/types": ^27.1.0
+    ansi-regex: ^5.0.0
+    ansi-styles: ^5.0.0
+    react-is: ^17.0.1
+  checksum: 2472b03b804c21cb1fde94fb01c4ad6e3395e33d8e339ae0ee3dbca0a212235079c8250b5ccb15aa8700c7107b6bbbaaf7ab0d8246d4cf9092e9467a6e22beda
   languageName: node
   linkType: hard
 

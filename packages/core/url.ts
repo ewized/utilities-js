@@ -1,5 +1,4 @@
-/** @type {(value: any) => string} */
-const types = (value) => {
+const types = (value: any): string => {
   if (value === null) {
     return 'null';
   } else if (Array.isArray(value)) {
@@ -8,7 +7,9 @@ const types = (value) => {
   return typeof value;
 };
 
-export const SerializeTypes = Object.freeze({
+type SerializeType = (value?: any) => string;
+
+export const SerializeTypes: { [key: string]: SerializeType } = Object.freeze({
   null: () => 'null',
   undefined: () => 'null',
   string: (value) => `${encodeURIComponent(value)}`,
@@ -19,7 +20,7 @@ export const SerializeTypes = Object.freeze({
     ))));
   },
   array: function(value) {
-    return `[${value.map((value) => this.serialize(value)).join()}]`;
+    return `[${value.map((value: any) => this.serialize(value)).join()}]`;
   },
 
   serialize(value) {
@@ -27,15 +28,15 @@ export const SerializeTypes = Object.freeze({
   },
 });
 
-export const ArraySerializeTypes = Object.freeze({
+export const ArraySerializeTypes: { [key: string]: SerializeType } = Object.freeze({
   ...SerializeTypes,
 
   array: function(value) {
-    return value.map((value) => SerializeTypes.serialize(value)).join();
+    return value.map((value: any) => SerializeTypes.serialize(value)).join();
   },
 });
 
-export const ObjectSerializeTypes = Object.freeze({
+export const ObjectSerializeTypes: { [key: string]: SerializeType } = Object.freeze({
   ...SerializeTypes,
 
   object: function(value) {
@@ -48,10 +49,8 @@ export const ObjectSerializeTypes = Object.freeze({
 
 /**
  * Create the named templated string with the provided base url
- *
- * @type {(urlBase: string | URL) => (strings: TemplateStringsArray, ...tags: any) => URL}
  */
-export const createUrl = (urlBase) => (strings, ...tags) => (
+export const createUrl = (urlBase: string | URL) => (strings: TemplateStringsArray, ...tags: any): URL => (
   new URL(strings.reduce((acc, value) => {
     const tag = tags.shift();
     // url params encoding
@@ -66,10 +65,8 @@ export const createUrl = (urlBase) => (strings, ...tags) => (
 
 /**
  * String template that creates a url from the string
- *
- * @type {(strings: TemplateStringsArray, ...tags: any) => URL}
  */
-export const url = (strings, ...tags) => {
+export const url = (strings: TemplateStringsArray, ...tags: any): URL => {
   // use the first tag as the base url, then replace that tag with an empty string
   const urlBase = strings[0] === '' ? tags.splice(0, 1, '') : undefined;
   return createUrl(urlBase)(strings, ...tags);

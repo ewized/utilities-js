@@ -1,5 +1,5 @@
-export * from './preconditions.js';
-export * from './url.js';
-export * from './utils.js';
+export * from './preconditions';
+export * from './url';
+export * from './utils';
 
 export const NAME = '@ewized/utilities-core';

@@ -1,4 +1,4 @@
-import { SerializeTypes, createUrl, url } from './url.js';
+import { SerializeTypes, createUrl, url } from './url';
 
 
 it('should create url bases', () => {
@@ -12,11 +12,13 @@ it('should create url bases', () => {
 });
 
 it('should parse', () => {
-  url`https://example.com/`; // ?
-  url`https://example.com/` == 'https://example.com/'; // true
-  url`https://example.com/` === 'https://example.com/'; // false
-  url`https://example.com/` == url`https://example.com/`; // false
-  url`https://example.com/` === url`https://example.com/`; // false
+  url`https://example.com/`; //?
+  // @ts-ignore
+  url`https://example.com/` == 'https://example.com/'; //? true
+  // @ts-ignore
+  url`https://example.com/` === 'https://example.com/'; //? false
+  url`https://example.com/` == url`https://example.com/`; //? false
+  url`https://example.com/` === url`https://example.com/`; //? false
 
   expect(String(url`https://example.com/`))
     .toBe(`${url`https://example.com/`}`);
