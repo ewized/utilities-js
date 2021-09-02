@@ -1,4 +1,4 @@
-import { SerializeTypes, createUrl, url } from './url';
+import { SerializeTypes, createUrl, url } from './urls';
 
 
 it('should create url bases', () => {
